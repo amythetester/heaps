@@ -85,21 +85,16 @@ class MinHeap
 
     if @store[left_child] == nil
       return
-    end
-
-    if @store[right_child] == nil && store[index].key <= @store[left_child].key
+    elsif @store[right_child] == nil && @store[index].key > @store[left_child].key
       swap(index, left_child)
       return
-    end
-
-    if @store[index].key <= @store[left_child].key && @store[index].key <= @store[right_child].key || index == @store.length - 1
-      return
-    elsif @store[left_child].key > @store[right_child].key
-      swap(index, right_child)
-      heap_down(right_child)
     else
-      swap(index, left_child)
-      heap_down(left_child)
+      min_child = @store[right_child].key < @store[left_child].key ? right_child : left_child
+
+      if @store[index].key > @store[min_child].key
+        swap(index, min_child)
+        heap_down(min_child)
+      end
     end
   end
 
