@@ -8,26 +8,34 @@ class HeapNode
 end
 
 class MinHeap
-
   def initialize
     @store = []
   end
 
   # This method adds a HeapNode instance to the heap
-  # Time Complexity: ?
-  # Space Complexity: ?
+  # Time Complexity: O(logn) where n is the length of the heap
+  # Space Complexity: 0(1)
   def add(key, value = key)
-    raise NotImplementedError, "Method not implemented yet..."
+    @store << HeapNode.new(key, value)
+
+    heap_up(@store.length - 1)
   end
 
   # This method removes and returns an element from the heap
   #   maintaining the heap structure
-  # Time Complexity: ?
-  # Space Complexity: ?
+  # Time Complexity: O(logn) where n is the length of the heap
+  # Space Complexity: 0(1)
   def remove()
-    raise NotImplementedError, "Method not implemented yet..."
-  end
+    if @store.empty?
+      return nil
+    end
 
+    swap(0, @store.length - 1)
+    result = @store.pop
+
+    heap_down(0) unless @store.empty?
+    return result.value
+  end
 
   # Used for Testing
   def to_s
@@ -39,15 +47,15 @@ class MinHeap
     end
 
     output += @store.last.value + "]"
-      
+
     return output
   end
 
   # This method returns true if the heap is empty
-  # Time complexity: ?
-  # Space complexity: ?
+  # Time complexity: O(n) where n is the length of @store
+  # Space complexity: O(1)
   def empty?
-    raise NotImplementedError, "Method not implemented yet..."
+    return @store.length == 0
   end
 
   private
@@ -55,17 +63,44 @@ class MinHeap
   # This helper method takes an index and
   #  moves it up the heap, if it is less than it's parent node.
   #  It could be **very** helpful for the add method.
-  # Time complexity: ?
-  # Space complexity: ?
+  # Time Complexity: O(logn) where n is the length of the heap
+  # Space Complexity: 0(1)
   def heap_up(index)
-    
+    parent_node_index = index.odd? ? (index - 1) / 2 : (index - 2) / 2
+
+    if @store[index].key >= @store[parent_node_index].key || index == 0
+      return
+    else
+      swap(index, parent_node_index)
+      heap_up(parent_node_index)
+    end
   end
 
-  # This helper method takes an index and 
+  # This helper method takes an index and
   #  moves it up the heap if it's smaller
   #  than it's parent node.
   def heap_down(index)
-    raise NotImplementedError, "Method not implemented yet..."
+    left_child = 2 * index + 1
+    right_child = 2 * index + 2
+
+    if @store[left_child] == nil
+      return
+    end
+
+    if @store[right_child] == nil && store[index].key <= @store[left_child].key
+      swap(index, left_child)
+      return
+    end
+
+    if @store[index].key <= @store[left_child].key && @store[index].key <= @store[right_child].key || index == @store.length - 1
+      return
+    elsif @store[left_child].key > @store[right_child].key
+      swap(index, right_child)
+      heap_down(right_child)
+    else
+      swap(index, left_child)
+      heap_down(left_child)
+    end
   end
 
   # If you want a swap method... you're welcome
