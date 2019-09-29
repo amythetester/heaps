@@ -88,6 +88,8 @@ class MinHeap
     elsif @store[right_child] == nil && @store[index].key > @store[left_child].key
       swap(index, left_child)
       return
+    elsif @store[right_child] == nil
+      return
     else
       min_child = @store[right_child].key < @store[left_child].key ? right_child : left_child
 
